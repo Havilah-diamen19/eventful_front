@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventful – Your Passport to Unforgettable Moments</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-logo">
+      <span class="logo-icon">🎟️</span>
+      <span class="logo-text">Eventful</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#events" class="nav-link">Explore</a>
+      <a href="#how-it-works" class="nav-link">How It Works</a>
+      <div id="guestNav">
+        <button class="btn btn-ghost" onclick="openModal('loginModal')">Login</button>
+        <button class="btn btn-primary" onclick="openModal('registerModal')">Sign Up</button>
+      </div>
+      <div id="authNav" style="display:none" class="auth-nav">
+        <button class="btn btn-ghost" id="dashboardBtn" onclick="showDashboard()">Dashboard</button>
+        <div class="avatar-menu">
+          <div class="avatar" id="userAvatar" onclick="toggleAvatarMenu()">J</div>
+          <div class="avatar-dropdown" id="avatarDropdown">
+            <div class="avatar-info">
+              <strong id="avatarName">John Doe</strong>
+              <span id="avatarRole" class="role-badge">eventee</span>
+            </div>
+            <hr />
+            <a onclick="showSection('my-tickets')">My Tickets</a>
+            <a onclick="showSection('notifications')">Notifications <span class="badge" id="notifBadge"></span></a>
+            <a onclick="logout()" class="text-danger">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">☰</button>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🌟 Discover Amazing Events</div>
+    <h1 class="hero-title">Your Passport to<br/><span class="gradient-text">Unforgettable Moments</span></h1>
+    <p class="hero-subtitle">From pulsating concerts to captivating theater performances — find, book, and experience events that move you.</p>
+    <div class="hero-search">
+      <input type="text" id="heroSearch" placeholder="Search events, artists, venues..." />
+      <button class="btn btn-primary btn-lg" onclick="searchEvents()">
+        <span>🔍</span> Search
+      </button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><strong id="statEvents">—</strong><span>Events</span></div>
+      <div class="stat"><strong id="statTickets">—</strong><span>Tickets Sold</span></div>
+      <div class="stat"><strong id="statCities">10+</strong><span>Cities</span></div>
+    </div>
+  </div>
+  <div class="hero-scroll" onclick="document.getElementById('events').scrollIntoView({behavior:'smooth'})">↓</div>
+</section>
+
+<!-- ============ CATEGORY FILTERS ============ -->
+<section class="categories-section">
+  <div class="container">
+    <div class="categories">
+      <button class="cat-btn active" onclick="filterCategory('')" data-cat="">All</button>
+      <button class="cat-btn" onclick="filterCategory('concert')" data-cat="concert">🎵 Concerts</button>
+      <button class="cat-btn" onclick="filterCategory('theater')" data-cat="theater">🎭 Theater</button>
+      <button class="cat-btn" onclick="filterCategory('sports')" data-cat="sports">⚽ Sports</button>
+      <button class="cat-btn" onclick="filterCategory('cultural')" data-cat="cultural">🏛️ Cultural</button>
+      <button class="cat-btn" onclick="filterCategory('conference')" data-cat="conference">💼 Conferences</button>
+      <button class="cat-btn" onclick="filterCategory('workshop')" data-cat="workshop">🛠️ Workshops</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EVENTS GRID ============ -->
+<section class="events-section" id="events">
+  <div class="container">
+    <div class="section-header">
+      <h2>Upcoming Events</h2>
+      <div class="events-toolbar">
+        <input type="text" id="searchInput" placeholder="Filter events..." oninput="debounceSearch(this.value)" />
+        <select id="sortSelect" onchange="loadEvents()">
+          <option value="">Sort by Date</option>
+          <option value="price_asc">Price: Low to High</option>
+          <option value="price_desc">Price: High to Low</option>
+        </select>
+      </div>
+    </div>
+    <div id="eventsGrid" class="events-grid">
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading events...</p>
+      </div>
+    </div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="how-section" id="how-it-works">
+  <div class="container">
+    <div class="section-header centered">
+      <h2>How Eventful Works</h2>
+      <p>Three simple steps to your next unforgettable experience</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-icon">🔍</div>
+        <div class="step-num">01</div>
+        <h3>Discover</h3>
+        <p>Browse thousands of events across all categories — concerts, sports, theater, workshops and more.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">🎟️</div>
+        <div class="step-num">02</div>
+        <h3>Book</h3>
+        <p>Secure your spot with our seamless Paystack payment integration. Get your QR ticket instantly.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">✨</div>
+        <div class="step-num">03</div>
+        <h3>Experience</h3>
+        <p>Show your QR code at the door, get notified with reminders, and create lasting memories.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DASHBOARD (hidden by default) ============ -->
+<section id="dashboard" style="display:none" class="dashboard-section">
+  <div class="container">
+    <div class="dashboard-tabs">
+      <button class="tab-btn active" onclick="switchTab('overview')" id="tab-overview">Overview</button>
+      <button class="tab-btn" onclick="switchTab('my-events')" id="tab-my-events" data-creator-only>My Events</button>
+      <button class="tab-btn" onclick="switchTab('create-event')" id="tab-create-event" data-creator-only>+ Create Event</button>
+      <button class="tab-btn" onclick="switchTab('my-tickets')" id="tab-my-tickets">My Tickets</button>
+      <button class="tab-btn" onclick="switchTab('analytics')" id="tab-analytics" data-creator-only>Analytics</button>
+      <button class="tab-btn" onclick="switchTab('notifications')" id="tab-notifications">
+        Notifications <span class="badge" id="tabNotifBadge"></span>
+      </button>
+    </div>
+    <div id="dashboardContent"></div>
+  </div>
+</section>
+
+<!-- ============ EVENT DETAIL MODAL ============ -->
+<div class="modal" id="eventModal">
+  <div class="modal-overlay" onclick="closeModal('eventModal')"></div>
+  <div class="modal-box modal-lg">
+    <button class="modal-close" onclick="closeModal('eventModal')">✕</button>
+    <div id="eventModalContent"></div>
+  </div>
+</div>
+
+<!-- ============ LOGIN MODAL ============ -->
+<div class="modal" id="loginModal">
+  <div class="modal-overlay" onclick="closeModal('loginModal')"></div>
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+    <div class="modal-header">
+      <span class="modal-logo">🎟️</span>
+      <h2>Welcome Back</h2>
+      <p>Sign in to your Eventful account</p>
+    </div>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="loginEmail" placeholder="you@example.com" required />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-icon-wrap">
+          <input type="password" id="loginPassword" placeholder="••••••••" required />
+          <span class="input-icon" onclick="togglePassword('loginPassword')">👁️</span>
+        </div>
+      </div>
+      <div id="loginError" class="form-error"></div>
+      <button type="submit" class="btn btn-primary btn-full" id="loginBtn">Sign In</button>
+    </form>
+    <p class="modal-footer-text">
+      Don't have an account? <a onclick="switchModal('loginModal','registerModal')">Sign up</a>
+    </p>
+  </div>
+</div>
+
+<!-- ============ REGISTER MODAL ============ -->
+<div class="modal" id="registerModal">
+  <div class="modal-overlay" onclick="closeModal('registerModal')"></div>
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
+    <div class="modal-header">
+      <span class="modal-logo">🎟️</span>
+      <h2>Join Eventful</h2>
+      <p>Create your account and start exploring</p>
+    </div>
+    <form id="registerForm" onsubmit="handleRegister(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" id="regFirstName" placeholder="John" required />
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="regLastName" placeholder="Doe" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="regEmail" placeholder="you@example.com" required />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="regPassword" placeholder="Min 8 chars, uppercase & number" required />
+      </div>
+      <div class="form-group">
+        <label>I want to</label>
+        <div class="role-selector">
+          <label class="role-card selected" data-role="eventee">
+            <input type="radio" name="role" value="eventee" checked />
+            <span class="role-icon">🎫</span>
+            <span class="role-name">Attend Events</span>
+            <span class="role-desc">Browse and buy tickets</span>
+          </label>
+          <label class="role-card" data-role="creator">
+            <input type="radio" name="role" value="creator" />
+            <span class="role-icon">🎪</span>
+            <span class="role-name">Create Events</span>
+            <span class="role-desc">Host and manage events</span>
+          </label>
+        </div>
+      </div>
+      <div id="registerError" class="form-error"></div>
+      <button type="submit" class="btn btn-primary btn-full" id="registerBtn">Create Account</button>
+    </form>
+    <p class="modal-footer-text">
+      Already have an account? <a onclick="switchModal('registerModal','loginModal')">Sign in</a>
+    </p>
+  </div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">🎟️ Eventful</div>
+        <p>Your passport to unforgettable moments. Discover, book, and experience events that move you.</p>
+        <div class="social-links">
+          <a href="#" title="Twitter">𝕏</a>
+          <a href="#" title="Instagram">📸</a>
+          <a href="#" title="Facebook">f</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Discover</h4>
+        <a href="#events">Browse Events</a>
+        <a href="#how-it-works">How It Works</a>
+        <a onclick="openModal('registerModal')">Create Account</a>
+      </div>
+      <div class="footer-links">
+        <h4>Creators</h4>
+        <a onclick="openModal('registerModal')">Host an Event</a>
+        <a href="./api/docs" target="_blank">API Docs</a>
+      </div>
+      <div class="footer-links">
+        <h4>Support</h4>
+        <a href="#">Help Center</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Eventful. Made with ❤️ in Nigeria.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="./app.js"></script>
+</body>
+</html>

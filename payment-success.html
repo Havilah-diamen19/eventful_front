@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment Success</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      background: #f5f5f5;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      width: 350px;
+    }
+    .success {
+      color: green;
+      font-size: 22px;
+      font-weight: bold;
+    }
+    .ref {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 15px;
+      border: none;
+      background: black;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="success">Payment Successful 🎉</div>
+    <div class="ref" id="refText">Verifying transaction...</div>
+    <button onclick="goHome()">Go Home</button>
+  </div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const reference = params.get("reference") || params.get("trxref");
+
+  const refText = document.getElementById("refText");
+
+  async function verifyPayment(ref) {
+    try {
+      // Replace with your backend endpoint
+      const res = await fetch(`http://localhost:5000/payments/verify/${ref}`);
+      const data = await res.json();
+
+      if (data.status === "success") {
+        refText.innerText = "Ref: " + ref;
+      } else {
+        refText.innerText = "Payment could not be verified.";
+        refText.style.color = "red";
+      }
+    } catch (err) {
+      refText.innerText = "Error verifying payment.";
+      refText.style.color = "red";
+    }
+  }
+
+  function goHome() {
+    window.location.href = "/";
+  }
+
+  if (reference) {
+    verifyPayment(reference);
+  } else {
+    refText.innerText = "No payment reference found.";
+    refText.style.color = "red";
+  }
+</script>
+
+</body>
+</html>
