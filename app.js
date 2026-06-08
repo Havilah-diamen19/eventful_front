@@ -1,4 +1,4 @@
-const API = 'http://localhost:5000';
+const API = 'https://eventful-backend-1sc1.onrender.com';
 let state = {
   token: localStorage.getItem('evtToken'),
   user: JSON.parse(localStorage.getItem('evtUser') || 'null'),
